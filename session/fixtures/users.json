@@ -1,0 +1,82 @@
+[
+    {
+        "fields": {
+            "first_name": "Jdavie",
+            "last_name": "Valencia"
+        },
+        "model": "session.UserModel",
+        "pk": 1
+    },
+    {
+        "fields": {
+            "first_name": "York",
+            "last_name": "Brawson"
+        },
+        "model": "session.UserModel",
+        "pk": 2
+    },
+    {
+        "fields": {
+            "first_name": "Susana",
+            "last_name": "Monson"
+        },
+        "model": "session.UserModel",
+        "pk": 3
+    },
+    {
+        "fields": {
+            "first_name": "Olympe",
+            "last_name": "Wetherburn"
+        },
+        "model": "session.UserModel",
+        "pk": 4
+    },
+    {
+        "fields": {
+            "first_name": "Gill",
+            "last_name": "Dovidaitis"
+        },
+        "model": "session.UserModel",
+        "pk": 5
+    },
+    {
+        "fields": {
+            "first_name": "Jefferey",
+            "last_name": "Charlot"
+        },
+        "model": "session.UserModel",
+        "pk": 6
+    },
+    {
+        "fields": {
+            "first_name": "Pepita",
+            "last_name": "Kimberly"
+        },
+        "model": "session.UserModel",
+        "pk": 7
+    },
+    {
+        "fields": {
+            "first_name": "Marthe",
+            "last_name": "Tonepohl"
+        },
+        "model": "session.UserModel",
+        "pk": 8
+    },
+    {
+        "fields": {
+            "first_name": "Hi",
+            "last_name": "Blum"
+        },
+        "model": "session.UserModel",
+        "pk": 9
+    },
+    {
+        "fields": {
+            "first_name": "Devora",
+            "last_name": "Varlow"
+        },
+        "model": "session.UserModel",
+        "pk": 10
+    }
+]
