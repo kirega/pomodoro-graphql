@@ -2,50 +2,50 @@
 # GraphQl implementation
 from session.models import Session, UserModel
 from graphene_django import DjangoObjectType
+from graphene_django.filter import DjangoFilterConnectionField
 import graphene
 
-class UserObject(DjangoObjectType):
+class UserNode(DjangoObjectType):
     class Meta:
         model = UserModel
+        filter_fields =['first_name', 'last_name']
+        interfaces = (graphene.relay.Node,)
+
+class UserMutation(graphene.relay.ClientIDMutation):
+    class Input:
+        first_name = graphene.String(required=True)
+        last_name = graphene.String(required=True)
+    # the response after mutation
+    user =  graphene.Field(UserNode)
+
+    @classmethod
+    def mutate_and_get_payload(cls, root, info, first_name,last_name):
+        user = UserModel.objects.create(first_name=first_name, last_name=last_name)
+        user.save()
+        return UserMutation(user=user)
 
 
-class SessionObject(DjangoObjectType):
+class SessionNode(DjangoObjectType):
     class Meta:
         model = Session
+        filter_fields = {
+            'name': ['exact', 'icontains', 'istartswith'],
+            'completed': ['exact'],
+            'owner': ['exact'],
+            'owner__first_name': ['exact', 'icontains'],
+            'owner__last_name': ['exact', 'icontains']
+        }
+        interfaces = (graphene.relay.Node,)
+
 
 
 class Query(graphene.ObjectType):
-    user = graphene.Field(UserObject, id=graphene.Int(), first_name=graphene.String())
-    session = graphene.Field(SessionObject, id=graphene.Int(), name=graphene.String())
-    users = graphene.List(UserObject)
-    sessions = graphene.List(SessionObject)
+    session = graphene.relay.Node.Field(SessionNode)
+    all_sessions = DjangoFilterConnectionField(SessionNode)
+    user = graphene.relay.Node.Field(UserNode)
+    all_users = DjangoFilterConnectionField(UserNode)
 
-    def resolve_users(self, info):
-        return UserModel.objects.all()
-    
-    def resolve_user(self, info, **kwargs):
-        id = kwargs.get('id')
-        name =  kwargs.get('first_name')
-        if id is not None:
-            return UserModel.objects.get(pk=id)
+class Mutation(graphene.ObjectType):
+    create_user = UserMutation.Field()
 
-        if name is not None:
-            return UserModel.objects.get(first_name=name)
-    
-        return None
-
-    def resolve_sessions(self, info):
-        return Session.objects.all()
-
-    def resolve_session(self, info, **kwargs):
-        id = kwargs.get('id')
-        owner =  kwargs.get('owner')
-        if id is not None:
-            return Session.objects.get(pk=id)
-
-        if owner is not None:
-            return Session.objects.get(owner=owner)
-            
-        return None
-
-schema = graphene.Schema(query=Query)
+schema = graphene.Schema(query=Query, mutation=Mutation)
